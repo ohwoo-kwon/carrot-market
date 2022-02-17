@@ -3,11 +3,14 @@
 
 generator client {
   provider = "prisma-client-js"
+  // referentialIntegrity db 객체의 존재유무를 파악
+  previewFeatures = ["referentialIntegrity"]
 }
 
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
 model User {
