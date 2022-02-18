@@ -1,23 +1,27 @@
-import { prisma } from "@prisma/client";
 import { NextApiRequest, NextApiResponse } from "next";
 import client from "../../../libs/server/client";
 import withHandler from "../../../libs/server/withHandler";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { phone, email } = req.body;
-  const user = await client.user.upsert({
-    where: {
-      ...(phone ? { phone: +phone } : {}),
-      ...(email ? { email } : {}),
+  const user = phone ? { phone } : { email };
+  const token = await client.token.create({
+    data: {
+      payload: "1236",
+      user: {
+        connectOrCreate: {
+          where: {
+            ...user,
+          },
+          create: {
+            name: "Anonymous",
+            ...user,
+          },
+        },
+      },
     },
-    create: {
-      name: "Anonymous",
-      ...(phone ? { phone: +phone } : {}),
-      ...(email ? { email } : {}),
-    },
-    update: {},
   });
-  console.log(user);
+  console.log(token);
   // if (email) {
   //   user = await client.user.findFirst({
   //     where: {
