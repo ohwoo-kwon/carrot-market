@@ -21,11 +21,13 @@ interface ItemDetailResponse {
 
 const ItemDetail: NextPage = () => {
   const router = useRouter();
-  const { data } = useSWR<ItemDetailResponse>(
+  const { data, mutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/favorite`);
   const onFavClick = () => {
+    if (!data) return;
+    mutate({ ...data, isLiked: !data.isLiked }, false);
     toggleFav({});
   };
   return (
@@ -61,7 +63,7 @@ const ItemDetail: NextPage = () => {
                 className={cls(
                   "p-3 rounded-md flex items-center justify-center",
                   data?.isLiked
-                    ? "text-red-400 hover:bg-red-100 hover:text-red-600"
+                    ? "text-red-500 hover:bg-red-100 hover:text-red-600"
                     : "text-gray-400 hover:bg-gray-100 hover:text-gray-500"
                 )}
               >
