@@ -24,7 +24,6 @@ const Enter: NextPage = () => {
     useMutation<MutationResult>("/api/users/enter");
   const [confirmToken, { loading: tokenLoading, data: tokenData }] =
     useMutation<MutationResult>("/api/users/confirm");
-  const [submitting, setSubmitting] = useState<boolean>(false);
   const { register, handleSubmit, reset } = useForm<EnterForm>();
   const { register: tokenRegister, handleSubmit: tokenHandleSubmit } =
     useForm<TokenForm>();
@@ -57,11 +56,11 @@ const Enter: NextPage = () => {
             <Input
               register={tokenRegister("token", { required: true })}
               name="token"
-              label="Token"
+              label="Confirmation Token"
               type="number"
               required
             />
-            <Button text={submitting ? "Loading" : "Confirm Token"} />
+            <Button text={tokenLoading ? "Loading" : "Confirm Token"} />
           </form>
         ) : (
           <>
@@ -119,9 +118,7 @@ const Enter: NextPage = () => {
               ) : null}
               {method === "email" ? <Button text={"Get login link"} /> : null}
               {method === "phone" ? (
-                <Button
-                  text={submitting ? "Loading" : "Get one-time password"}
-                />
+                <Button text={loading ? "Loading" : "Get one-time password"} />
               ) : null}
             </form>
           </>
