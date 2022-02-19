@@ -15,7 +15,7 @@ async function handler(
 
 export default withAPISession(
   withHandler({
-    method: "GET",
+    methods: ["GET"],
     handler,
   })
 );
