@@ -9,6 +9,7 @@ import { Product } from "@prisma/client";
 interface ProductResponse {
   ok: boolean;
   products: Product[];
+  _counts: { favorites: number };
 }
 
 const Home: NextPage = () => {
@@ -24,7 +25,7 @@ const Home: NextPage = () => {
             title={product.name}
             price={product.price}
             comments={1}
-            hearts={1}
+            hearts={product._count.favorites}
           />
         ))}
         <FloatingButton href="/products/upload">
