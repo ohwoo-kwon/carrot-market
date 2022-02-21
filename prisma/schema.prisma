@@ -102,6 +102,7 @@ model Review {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   review String @db.MediumText
+  score Int? @default(1)
 }
 
 model Sale {
