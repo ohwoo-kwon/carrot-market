@@ -10,15 +10,23 @@ async function handler(
   const {
     session: { user },
   } = req;
-  const favorites = await client.favorite.findMany({
+  const favs = await client.favs.findMany({
     where: {
       userId: user?.id,
     },
     include: {
-      product: true,
+      product: {
+        include: {
+          _count: {
+            select: {
+              favorites: true,
+            },
+          },
+        },
+      },
     },
   });
-  res.json({ ok: true, favorites });
+  res.json({ ok: true, favs });
 }
 
 export default withAPISession(

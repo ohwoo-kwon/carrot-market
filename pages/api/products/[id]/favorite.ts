@@ -9,20 +9,20 @@ async function handler(
 ) {
   const { id } = req.query;
   const { user } = req.session;
-  const alreadyExists = await client.favorite.findFirst({
+  const alreadyExists = await client.favs.findFirst({
     where: {
       productId: +id.toString(),
       userId: user?.id,
     },
   });
   if (alreadyExists) {
-    await client.favorite.delete({
+    await client.favs.delete({
       where: {
         id: alreadyExists.id,
       },
     });
   } else {
-    await client.favorite.create({
+    await client.favs.create({
       data: {
         user: {
           connect: {

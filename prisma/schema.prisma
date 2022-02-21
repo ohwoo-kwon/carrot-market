@@ -30,7 +30,7 @@ model User {
   receivedReviews Review[] @relation(name:"receivedReviews")
   sales Sale[]
   purchases Purchase[]
-  favorites Favorite[]
+  favorites Favs[]
   records Record[]
 }
 
@@ -53,7 +53,7 @@ model Product {
   name String
   price Int
   description String @db.MediumText
-  favorites Favorite[]
+  favorites Favs[]
   sales Sale[]
   purchases Purchase[]
   records Record[]
@@ -125,7 +125,7 @@ model Purchase {
   updatedAt DateTime @updatedAt
 }
 
-model Favorite {
+model Favs {
   id        Int      @id @default(autoincrement())
   user User @relation(fields:[userId], references: [id], onDelete: Cascade)
   userId Int

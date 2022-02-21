@@ -6,7 +6,7 @@ import useUser from "@libs/client/useUser";
 import useSWR from "swr";
 import { Product } from "@prisma/client";
 
-interface ProductWithFav extends Product {
+export interface ProductWithFav extends Product {
   _count: { favorites: number };
 }
 
@@ -27,7 +27,6 @@ const Home: NextPage = () => {
             key={product.id}
             title={product.name}
             price={product.price}
-            comments={1}
             hearts={product._count.favorites}
           />
         ))}
