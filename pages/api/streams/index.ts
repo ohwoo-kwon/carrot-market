@@ -8,15 +8,34 @@ async function handler(
   res: NextApiResponse<ResponseType>
 ) {
   const {
-    body: { name, price, description },
     session: { user },
   } = req;
-  res.json({ ok: true });
+  if (req.method === "POST") {
+    const {
+      body: { name, price, description },
+    } = req;
+    const stream = await client.stream.create({
+      data: {
+        name,
+        price,
+        description,
+        user: {
+          connect: {
+            id: user?.id,
+          },
+        },
+      },
+    });
+    res.json({ ok: true, stream });
+  } else if (req.method === "GET") {
+    const streams = await client.stream.findMany();
+    res.json({ ok: true, streams });
+  }
 }
 
 export default withAPISession(
   withHandler({
-    methods: ["POST"],
+    methods: ["GET", "POST"],
     handler,
     isPrivate: false,
   })
