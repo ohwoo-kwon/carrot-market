@@ -28,7 +28,13 @@ async function handler(
     });
     res.json({ ok: true, stream });
   } else if (req.method === "GET") {
-    const streams = await client.stream.findMany();
+    const {
+      query: { page },
+    } = req;
+    const streams = await client.stream.findMany({
+      take: 10,
+      skip: (page - 1) * 10,
+    });
     res.json({ ok: true, streams });
   }
 }
