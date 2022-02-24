@@ -37,14 +37,23 @@ const EditProfile: NextPage = () => {
   }, [user, setValue]);
   const [editProfile, { data, loading }] =
     useMutation<EditProfileResponse>(`/api/users/me`);
-  const onValid = ({ email, phone, name, avatar }: EditProfileForm) => {
+  const onValid = async ({ email, phone, name, avatar }: EditProfileForm) => {
     if (loading) return;
     if (email === "" && phone === "" && name === "") {
       return setError("formErrors", {
         message: "Email address or Phone number is required.",
       });
     }
-    editProfile({ email, phone, name });
+    if (avatar && avatar.length > 0 && user) {
+      const { id, uploadURL } = await (await fetch(`/api/files`)).json();
+      const form = new FormData();
+      form.append("file", avatar[0], user?.id + "");
+      await fetch(uploadURL, { method: "POST", body: form });
+      return;
+      editProfile({ email, phone, name, avatarUrl });
+    } else {
+      editProfile({ email, phone, name });
+    }
   };
   useEffect(() => {
     if (data && !data.ok && data.error) {
