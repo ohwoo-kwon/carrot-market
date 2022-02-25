@@ -45,10 +45,13 @@ const ItemDetail: NextPage = () => {
     <Layout canGoBack>
       <div className="px-4  py-4">
         <div className="mb-8">
-          <img
-            src={`https://imagedelivery.net/CWmSXRI4a4GtzEmC6jdPoA/${data?.product?.image}/public`}
-            className="h-96 bg-slate-300"
-          />
+          <div className="relative pb-80">
+            <Image
+              src={`https://imagedelivery.net/CWmSXRI4a4GtzEmC6jdPoA/${data?.product?.image}/public`}
+              layout="fill"
+              className="bg-slate-300 object-cover"
+            />
+          </div>
           <div className="flex cursor-pointer py-3 border-t border-b items-center space-x-3">
             <Image
               src={`https://imagedelivery.net/CWmSXRI4a4GtzEmC6jdPoA/${data?.product?.user?.avatar}/avatar`}
@@ -123,7 +126,7 @@ const ItemDetail: NextPage = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Similar items</h2>
           <div className=" mt-6 grid grid-cols-2 gap-4">
-            {data?.relatedProducts.map((product) => (
+            {data?.relatedProducts?.map((product) => (
               <Link key={product.id} href={`/products/${product.id}`}>
                 <a>
                   <div className="h-56 w-full mb-4 bg-slate-300" />
