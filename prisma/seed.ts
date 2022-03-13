@@ -4,11 +4,14 @@ const client = new PrismaClient();
 
 async function main() {
   [...Array.from(Array(500).keys())].forEach(async (item) => {
-    const stream = await client.stream.create({
+    await client.stream.create({
       data: {
         name: String(item),
         description: String(item),
         price: item,
+        cloudflareId: "",
+        cloudflareUrl: "",
+        cloudflareKey: "",
         user: {
           connect: {
             id: 1,

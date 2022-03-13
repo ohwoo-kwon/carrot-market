@@ -122,6 +122,7 @@ const Profile: NextPage = () => {
                       key={star}
                       className={cls(
                         "h-5 w-5",
+                        // @ts-ignore
                         review.score >= star
                           ? "text-yellow-400"
                           : "text-gray-400"
