@@ -5,29 +5,31 @@ import Layout from "@components/layout";
 import useUser from "@libs/client/useUser";
 import useSWR from "swr";
 import { Product } from "@prisma/client";
+import client from "@libs/server/client";
 
-export interface ProductWithFav extends Product {
+export interface ProductWithCount extends Product {
   _count: { favorites: number };
 }
 
 interface ProductResponse {
   ok: boolean;
-  products: ProductWithFav[];
+  products: ProductWithCount[];
 }
 
-const Home: NextPage = () => {
+const Home: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
   const { user, isLoading } = useUser();
-  const { data } = useSWR<ProductResponse>("/api/products");
+  // const { data } = useSWR<ProductResponse>("/api/products");
   return (
-    <Layout title="홈" hasTabBar>
+    <Layout seoTitle="Home" title="홈" hasTabBar>
       <div className="flex flex-col space-y-5 divide-y">
-        {data?.products?.map((product) => (
+        {products?.map((product) => (
           <Item
             id={product.id}
             key={product.id}
             title={product.name}
             price={product.price}
-            hearts={product._count.favorites}
+            hearts={product._count?.favorites}
+            image={product.image}
           />
         ))}
         <FloatingButton href="/products/upload">
@@ -51,4 +53,14 @@ const Home: NextPage = () => {
     </Layout>
   );
 };
+
+export async function getServerSideProps() {
+  const products = await client.product.findMany({});
+  return {
+    props: {
+      products: JSON.parse(JSON.stringify(products)),
+    },
+  };
+}
+
 export default Home;
