@@ -3,7 +3,7 @@ import FloatingButton from "@components/floating-button";
 import Item from "@components/item";
 import Layout from "@components/layout";
 import useUser from "@libs/client/useUser";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 import { Product } from "@prisma/client";
 import client from "@libs/server/client";
 
@@ -16,13 +16,13 @@ interface ProductResponse {
   products: ProductWithCount[];
 }
 
-const Home: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
+const Home: NextPage = () => {
   const { user, isLoading } = useUser();
-  // const { data } = useSWR<ProductResponse>("/api/products");
+  const { data } = useSWR<ProductResponse>("/api/products");
   return (
     <Layout seoTitle="Home" title="홈" hasTabBar>
       <div className="flex flex-col space-y-5 divide-y">
-        {products?.map((product) => (
+        {data?.products?.map((product) => (
           <Item
             id={product.id}
             key={product.id}
@@ -54,6 +54,23 @@ const Home: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
   );
 };
 
+const Page: NextPage<{ products: ProductWithCount[] }> = ({ products }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/products": {
+            ok: true,
+            products,
+          },
+        },
+      }}
+    >
+      <Home />
+    </SWRConfig>
+  );
+};
+
 export async function getServerSideProps() {
   const products = await client.product.findMany({});
   return {
@@ -63,4 +80,4 @@ export async function getServerSideProps() {
   };
 }
 
-export default Home;
+export default Page;
