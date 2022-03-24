@@ -1,11 +1,11 @@
 ---
-title: Welcome Everyone
+title: Welcome Everyone 2
 date: 2022.03.24
-category: test
+category: test2
 ---
 
 # Welcome everyone!
 
-This is my first blog post!
+This is my second blog post!
 
 Thank you for reading!
