@@ -1,4 +1,4 @@
-import { ProductWithFav } from "pages";
+import { ProductWithCount } from "pages";
 import useSWR from "swr";
 import Item from "./item";
 
@@ -8,7 +8,7 @@ interface ProductListProps {
 
 interface Record {
   id: number;
-  product: ProductWithFav;
+  product: ProductWithCount;
 }
 
 interface ProductListResponse {
@@ -22,6 +22,7 @@ export default function ProductList({ kind }: ProductListProps) {
     <>
       {data[kind].map((record) => (
         <Item
+          image={record.product.image}
           id={record.product.id}
           key={record.id}
           title={record.product.name}
